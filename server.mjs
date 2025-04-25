@@ -3,6 +3,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './db/conn.mjs';
 import mammalRoutes from './routes/mammalRoutes.mjs';
+import Mammal from './models/mammalSchema.mjs';
+import allAnimals from './utilities/data.mjs';
 
 // Setups
 dotenv.config();
@@ -15,6 +17,15 @@ connectDB();
 
 // Routes
 app.use('/api/mammals', mammalRoutes);
+
+// seed route
+app.get('/seed', async (req, res) => {
+  // await Mammal.deleteMany({}); //Delete all data
+
+  await Mammal.create(allAnimals); //reseed all data
+
+  res.send('seeded data');
+});
 
 // ErrMiddleware
 app.use((err, _req, res, next) => {
